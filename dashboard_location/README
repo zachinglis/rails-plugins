@@ -1,0 +1,37 @@
+Dashboard Location
+============================----version 1 beta
+by Zach Inglis // zachinglis.com
+
+I was wanting to implement Basecamp-like urls to a project I was working on and found that account_location was only half of my soloution while dashboard_location was 
+only 3 quarters. Attached is a project-agnostic(no setting variables, do not worry) library for Rails.
+  
+It is not the cleanest of libraries yet but I intend on improving it. It is only 1 day old so far.
+
+  In controllers such as sessions_controller where you want people to be using the subdomain, use:
+    before_filter :should_add_subdomain_for_home_if_logged_in
+    before_filter :should_redirect_if_no_subdomain
+    
+  For controllers that should not be accessed through a subdomain, such as content controllers, use:
+    before_filter :redirect_dashboard_calls
+    
+  That is it! Just use methods like logged_in anywhere you like and it will work as you hope.
+
+Credits:
+  
+  While I hacked the hell out of it, credits are still due.
+  
+  David Heinemeier Hansson - for account_location - http://dev.rubyonrails.org/svn/rails/plugins/account_location/
+  Derek Haynes - for his modifications - http://cleanair.highgroove.com/articles/2006/08/14/simplied-subdomain-authentication-in-ruby-on-rails
+
+Installation:
+
+  Drag the dashboard_location.rb to your lib folder in your Rails directory.
+  
+  Perform: ruby ./script/generate model Home permalink:string name:string
+  
+  I use this in conjunction with Technoweenies permalink_fu to automatically generate the permalink. If you want to add the following code, else skip it:
+    has_permalink :name
+    
+  Add this to your signup process. Ryan address how to do similiar things here: http://railscasts.com/episodes/75
+    
+Cheers, hope your coding time is easier. Any suggestions or code changes you want to suggest, please email me by going to zachinglis.com/contact!
