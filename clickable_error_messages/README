@@ -5,6 +5,9 @@ Have a long form, or at least one that scrolls past the main page. Want to give 
 
 This is unobtrusive, no extra markup is required. If you remove it, your application will work as normal.
 
+NOTE: I am going to work on making this completely unobtrusive and so that it does not mess with .to_xml etc. This will require more 
+      hacking at a later date though.
+
 
 Example
 =======
