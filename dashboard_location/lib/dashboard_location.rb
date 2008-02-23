@@ -68,14 +68,16 @@ protected
   end
 
   def dashboard_link(permalink=nil)
-    protocol = request.ssl? ? "https://" : "http://"
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    protocol + home_permalink + "." + request.domain + request.port_string          
+    protocol + home_permalink + "." + request.domain_with_port          
   end
 
   def clean_root_url
-    protocol = request.ssl? ? "https://" : "http://"
-    protocol + request.domain + request.port_string              
+    protocol + request.domain + request.domain_with_port   
+  end
+  
+  def protocol
+    request.ssl? ? "https://" : "http://"
   end
 end
