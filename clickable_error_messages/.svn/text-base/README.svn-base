@@ -1,0 +1,34 @@
+Clickable Error Messages
+======================
+
+Have a long form, or at least one that scrolls past the main page. Want to give your users more interactivity on the forms?
+
+This is unobtrusive, no extra markup is required. If you remove it, your application will work as normal.
+
+
+Example
+=======
+
+In your view:
+	<%= error_messages_for :user %>
+	
+Example goes here.
+		<div class="errorExplanation" id="errorExplanation">
+			<h2>2 errors prohibited this user from being saved</h2>
+			<p>There were problems with the following fields:</p>
+			
+			<ul>
+				<li><a href="#user_password">Password</a> can't be blank</li>
+				<li><a href="#user_email">Email</a> can't be blank</li>
+			</ul>
+		</div>
+
+
+
+Credits
+=======
+
+	Zach Inglis - www.zachinglis.com
+	Chris Roos - blog.seagul.co.uk
+
+Copyright (c) 2007 Zach Inglis [www.lt3media.com], released under the MIT license
