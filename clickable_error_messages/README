@@ -3,6 +3,8 @@ Clickable Error Messages
 
 Have a long form, or at least one that scrolls past the main page. Want to give your users more interactivity on the forms?
 
+This plugin makes the attribute name a clickable link to the relative form field when using error_messages_for.
+
 This is unobtrusive, no extra markup is required. If you remove it, your application will work as normal.
 
 NOTE: I am going to work on making this completely unobtrusive and so that it does not mess with .to_xml etc. This will require more 
