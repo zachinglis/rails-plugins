@@ -70,11 +70,11 @@ protected
   def dashboard_link(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    protocol + home_permalink + "." + request.domain_with_port          
+    protocol + home_permalink + "." + request.host_with_port          
   end
 
   def clean_root_url
-    protocol + request.domain + request.domain_with_port   
+    protocol + request.domain + request.host_with_port   
   end
   
   def protocol
