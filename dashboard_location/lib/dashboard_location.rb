@@ -56,7 +56,7 @@ protected
     elsif logged_in? && current_user.home_id.nil?
       flash[:notice] = "You don't have a home."
       redirect_to root_url
-    elsif logged_in? && current_user.home_id != dashboard_subdomain.id
+    elsif logged_in? && current_user.home_id != current_dashboard.id
       flash[:notice] = "Please only access your own home panel."
       redirect_to dashboard_link(current_dashboard.permalink)
     elsif dashboard_subdomain && current_dashboard.nil?
@@ -68,7 +68,7 @@ protected
   end
 
   def redirect_to_dashboard_if_logged_in
-    redirect_to dashboard_url if logged_in?
+    redirect_to dashboard_link if logged_in?
   end
 
   def dashboard_link(permalink=nil)
