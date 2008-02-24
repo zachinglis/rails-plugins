@@ -53,9 +53,12 @@ protected
     if !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
       flash[:notice] = "Please login to access your account"
       redirect_to login_url
-    elsif logged_in? && current_user.home.permalink != dashboard_subdomain
+    elsif logged_in? && current_user.home_id.nil?
+      flash[:notice] = "You don't have a home."
+      redirect_to root_url
+    elsif logged_in? && current_user.home_id != dashboard_subdomain.id
       flash[:notice] = "Please only access your own home panel."
-      redirect_to dashboard_link(current_user.home.permalink)
+      redirect_to dashboard_link(current_dashboard.permalink)
     elsif dashboard_subdomain && current_dashboard.nil?
       flash[:notice] = "We can't find where you are looking for."
       redirect_to clean_root_url
