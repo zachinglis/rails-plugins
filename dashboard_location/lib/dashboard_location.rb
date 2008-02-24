@@ -49,6 +49,7 @@ protected
   end
 
   def redirect_dashboard_calls
+    return if request.subdomains.empty?
     if !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
       flash[:notice] = "Please login to access your account"
       redirect_to login_url
@@ -70,11 +71,11 @@ protected
   def dashboard_link(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    protocol + home_permalink + "." + request.host_with_port          
+    protocol + home_permalink + request.port_string
   end
 
   def clean_root_url
-    protocol + request.domain + request.host_with_port   
+    protocol + request.domain + request.port_string
   end
   
   def protocol
