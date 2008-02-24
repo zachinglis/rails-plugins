@@ -49,41 +49,37 @@ protected
   end
 
   def redirect_dashboard_calls
-    if logged_in? && !dashboard_subdomain.nil? && (!request.path.nil? || request.path != "/")      
-      redirect_to clean_root_url
-    elsif !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
+    return if request.subdomains.empty?
+    if !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
       flash[:notice] = "Please login to access your account"
       redirect_to login_url
-    elsif logged_in? && current_user.home_id.nil?      
-      flash[:notice] = "You don't have a home."
-      redirect_to clean_root_url
-    elsif logged_in? && current_dashboard && current_user.home_id != current_dashboard.id      
+    elsif logged_in? && current_user.home.permalink != dashboard_subdomain
       flash[:notice] = "Please only access your own home panel."
-      redirect_to dashboard_link(current_dashboard.permalink)
-    elsif dashboard_subdomain && current_dashboard.nil?      
+      redirect_to dashboard_link(current_user.home.permalink)
+    elsif dashboard_subdomain && current_dashboard.nil?
       flash[:notice] = "We can't find where you are looking for."
       redirect_to clean_root_url
-    elsif logged_in? && !dashboard_subdomain.nil? && (request.path.nil? || request.path == "/")      
+    elsif logged_in? && (request.path.nil? || request.path == "/")
       redirect_to_dashboard_if_logged_in
     end
   end
 
   def redirect_to_dashboard_if_logged_in
-    redirect_to dashboard_link if logged_in?
+    redirect_to dashboard_url if logged_in?
   end
-
-  def protect_controller
+  
+  def protect_controller_if_no_dashboard
     redirect_to dashboard_link if dashboard_subdomain.nil?
   end
 
   def dashboard_link(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    "#{protocol}#{home_permalink}.#{request.host}#{request.port_string}/dashboard"
+    protocol + home_permalink + "." + request.host + request.port_string
   end
 
   def clean_root_url
-    "#{protocol}#{request.host}#{request.port_string}/dashboard"
+    protocol + request.domain + request.host + request.port_string   
   end
   
   def protocol
