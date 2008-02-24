@@ -49,20 +49,21 @@ protected
   end
 
   def redirect_dashboard_calls
-    return if request.subdomains.empty?
-    if !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
+    if logged_in? && !dashboard_subdomain.nil? && (!request.path.nil? || request.path != "/")      
+      redirect_to clean_root_url
+    elsif !logged_in? && !dashboard_subdomain.nil? && !current_dashboard.nil?      
       flash[:notice] = "Please login to access your account"
       redirect_to login_url
-    elsif logged_in? && current_user.home_id.nil?
+    elsif logged_in? && current_user.home_id.nil?      
       flash[:notice] = "You don't have a home."
-      redirect_to root_url
-    elsif logged_in? && current_user.home_id != current_dashboard.id
+      redirect_to clean_root_url
+    elsif logged_in? && current_dashboard && current_user.home_id != current_dashboard.id      
       flash[:notice] = "Please only access your own home panel."
       redirect_to dashboard_link(current_dashboard.permalink)
-    elsif dashboard_subdomain && current_dashboard.nil?
+    elsif dashboard_subdomain && current_dashboard.nil?      
       flash[:notice] = "We can't find where you are looking for."
       redirect_to clean_root_url
-    elsif logged_in? && (request.path.nil? || request.path == "/")
+    elsif logged_in? && !dashboard_subdomain.nil? && (request.path.nil? || request.path == "/")      
       redirect_to_dashboard_if_logged_in
     end
   end
@@ -71,14 +72,18 @@ protected
     redirect_to dashboard_link if logged_in?
   end
 
+  def protect_controller_if_no_dashboard
+    redirect_to dashboard_link if dashboard_subdomain.nil?
+  end
+
   def dashboard_link(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    protocol + home_permalink + request.port_string
+    "#{protocol}#{home_permalink}.#{requesthost}#{request.port_string}/dashboard"
   end
 
   def clean_root_url
-    protocol + request.domain + request.port_string
+    "#{protocol}#{requesthost}#{request.port_string}/dashboard"
   end
   
   def protocol

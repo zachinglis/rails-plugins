@@ -9,7 +9,7 @@ It is not the cleanest of libraries yet but I intend on improving it. It is only
 
   In controllers such as sessions_controller where you want people to be using the subdomain, use:
     before_filter :should_add_subdomain_for_home_if_logged_in
-    before_filter :should_redirect_if_no_subdomain
+    before_filter :protect_controller_if_no_dashboard
     
   For controllers that should not be accessed through a subdomain, such as content controllers, use:
     before_filter :redirect_dashboard_calls
