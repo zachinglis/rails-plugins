@@ -72,18 +72,18 @@ protected
     redirect_to dashboard_link if logged_in?
   end
 
-  def protect_controller_if_no_dashboard
+  def protect_controller
     redirect_to dashboard_link if dashboard_subdomain.nil?
   end
 
   def dashboard_link(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
-    "#{protocol}#{home_permalink}.#{requesthost}#{request.port_string}/dashboard"
+    "#{protocol}#{home_permalink}.#{request.host}#{request.port_string}/dashboard"
   end
 
   def clean_root_url
-    "#{protocol}#{requesthost}#{request.port_string}/dashboard"
+    "#{protocol}#{request.host}#{request.port_string}/dashboard"
   end
   
   def protocol
