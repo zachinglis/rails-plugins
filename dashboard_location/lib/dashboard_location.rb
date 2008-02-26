@@ -2,7 +2,8 @@ module DashboardLocation
   def self.included(controller)
     controller.helper_method(:dashboard_domain, :dashboard_subdomain, 
                              :dashboard_host, :dashboard_url, 
-                             :current_dashboard, :current_subscription)
+                             :current_dashboard, :current_subscription,
+                             :clean_root_url, :clean_dashboard_url)
   end
 
 protected
@@ -40,12 +41,12 @@ protected
   end
   
   def should_add_subdomain_for_home_if_logged_in
-    redirect_to dashboard_link if request.subdomains.empty? && logged_in?
+    redirect_to clean_dashboard_url if request.subdomains.empty? && logged_in?
   end
 
   def should_redirect_if_no_subdomain
     return unless request.subdomains.empty?
-    redirect_to logged_in? ? dashboard_link : root_url
+    redirect_to logged_in? ? clean_dashboard_url : root_url
   end
 
   def redirect_dashboard_calls
@@ -55,7 +56,7 @@ protected
       redirect_to login_url
     elsif logged_in? && current_user.home.permalink != dashboard_subdomain
       flash[:notice] = "Please only access your own home panel."
-      redirect_to dashboard_link(current_user.home.permalink)
+      redirect_to clean_dashboard_url(current_user.home.permalink)
     elsif dashboard_subdomain && current_dashboard.nil?
       flash[:notice] = "We can't find where you are looking for."
       redirect_to clean_root_url
@@ -69,10 +70,10 @@ protected
   end
   
   def protect_controller_if_no_dashboard
-    redirect_to dashboard_link if dashboard_subdomain.nil?
+    redirect_to clean_dashboard_url if dashboard_subdomain.nil?
   end
 
-  def dashboard_link(permalink=nil)
+  def clean_dashboard_url(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = permalink unless permalink.nil? # overwrite fu
     protocol + home_permalink + "." + request.host + request.port_string
