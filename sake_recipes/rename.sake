@@ -1,5 +1,6 @@
 # Sake Script by Zach Inglis : zachinglis.com
-# I would like to make a script/rename file in the future but this is for the moment.
+# I would like to make a script/rename file in the future but this is a temporary soloution
+# I realise it is ugly, but this is my first use of Rake and can't seem to get methods working, etc. If you find you can better the code, please do so.
 desc "Rename a controller, use options as: from=todo to=tasks"
 namespace :rename do  
   task :controller do
