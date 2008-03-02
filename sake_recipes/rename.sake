@@ -28,6 +28,8 @@ namespace :rename do
         class #{to.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }}Helper
       Your test functional [/test/functional/#{to}_controller_test.rb]:
         class #{to.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }}ControllerTest < ActionController::TestCase
+          
+      Also do not forget to update your routes!
       "
     end
   end
