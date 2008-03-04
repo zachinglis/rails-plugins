@@ -34,4 +34,24 @@ namespace :rename do
       "
     end
   end
+  
+  task :model do
+    if ENV['FROM'].nil?
+      puts "Please specify the original controller name, like so: from=todo" and return if ENV['from'].nil?      
+    elsif ENV['TO'].nil?
+      puts "Please specify the original controller name, like so: to=tasks" and return if ENV['to'].nil?      
+    elsif ENV['FROM'] == ENV['TO']
+      puts "To and from are the same"
+    else
+      require 'fileutils'
+      from = ENV['FROM'].downcase
+      to = ENV['TO'].downcase
+      puts "Renaming the model file"
+      mv("app/models/#{from}.rb", "app/models/#{to}.rb")
+      mv("test/unit/#{from}_test.rb", "test/unit/#{to}_test.rb")
+      mv("test/fixtures/#{from}_test.rb", "test/unit/#{to}_test.rb") # need to work out how to use inflectors and thus pluralize
+      # create  test/fixtures/foos.yml
+      # create  db/migrate/002_create_foos.rb      
+    end 
+  end
 end

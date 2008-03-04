@@ -73,9 +73,9 @@ protected
     redirect_to clean_dashboard_url if dashboard_subdomain.nil?
   end
 
-  def clean_dashboard_url(permalink=nil)
+  def clean_dashboard_url(user=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
-    home_permalink = permalink unless permalink.nil? # overwrite fu
+    home_permalink = (user.is_a?(User) ? user.home.permalink : user ) unless user.nil? # overwrite fu
     protocol + home_permalink + "." + request.host + request.port_string
   end
 
