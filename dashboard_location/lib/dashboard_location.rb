@@ -72,15 +72,21 @@ protected
   def protect_controller_if_no_dashboard
     redirect_to clean_dashboard_url if dashboard_subdomain.nil?
   end
+  
+  def account_domain
+    account_domain = ""
+    account_domain << request.subdomains[1..-1].join(".") + "." if request.subdomains.size > 1
+    account_domain << request.domain + request.port_string
+  end  
 
-  def clean_dashboard_url(user=nil)
+  def clean_dashboard_url(permalink=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
-    home_permalink = (user.is_a?(User) ? user.home.permalink : user ) unless user.nil? # overwrite fu
-    "#{protocol}#{home_permalink}.#{request.host}#{request.port_string}"
+    home_permalink = permalink unless permalink.nil? # overwrite fu
+    "#{protocol}#{home_permalink}.#{account_domain}"
   end
 
   def clean_root_url
-    "#{protocol}#{request.domain}#{request.host}#{request.port_string}"
+    "#{protocol}#{account_domain}"
   end
   
   def protocol
