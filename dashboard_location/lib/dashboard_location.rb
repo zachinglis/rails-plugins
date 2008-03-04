@@ -76,11 +76,11 @@ protected
   def clean_dashboard_url(user=nil)
     home_permalink = request.subdomains.empty? ? current_user.home.permalink : request.subdomains.first
     home_permalink = (user.is_a?(User) ? user.home.permalink : user ) unless user.nil? # overwrite fu
-    protocol + home_permalink + "." + request.host + request.port_string
+    "#{protocol}#{home_permalink}.#{request.host}#{request.port_string}"
   end
 
   def clean_root_url
-    protocol + request.domain + request.host + request.port_string   
+    "#{protocol}#{request.domain}#{request.host}#{request.port_string}"
   end
   
   def protocol
